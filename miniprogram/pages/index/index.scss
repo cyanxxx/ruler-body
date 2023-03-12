@@ -1,0 +1,16 @@
+/**index.wxss**/
+.wrapper{
+  height: 100vh;
+  display: flex;
+  .button-view{
+    flex: 0 1 0;
+    margin: auto;
+  }
+  #photoCanvas{
+    width: 100%;
+    height: 100%;
+  }
+}
+.hidden{
+  display: none;
+}

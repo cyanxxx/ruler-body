@@ -1,0 +1,6 @@
+<view class="wrapper">
+  <view class="button-view {{!!ctx? 'hidden' : ''}}">
+    <t-button theme="primary" icon="add" bindtap="addPhotos">添加图片</t-button>
+  </view>
+  <canvas id="photoCanvas" type="2d" class="{{!ctx? 'hidden' : ''}}"></canvas>
+</view>
