@@ -2,5 +2,16 @@
   <view class="button-view {{!!ctx? 'hidden' : ''}}">
     <t-button theme="primary" icon="add" bindtap="addPhotos">添加图片</t-button>
   </view>
-  <canvas id="photoCanvas" type="2d" class="{{!ctx? 'hidden' : ''}}"></canvas>
+  <canvas id="photoCanvas" type="2d" class="canvas {{!ctx? 'hidden' : ''}}" bindtouchstart="canvasTouchStart" bindtouchmove="canvasTouchMove"  bindtouchend="canvasTouchEnd"></canvas>
+  <canvas id="hidden-photoCanvas" class="canvas" type="2d"></canvas>
+  <view class="bottom-tools {{!ctx? 'hidden' : ''}}">
+    <view class="color-picker-container">
+      <view class="color-picker"></view>
+    </view>
+    <view class="grid-picker">
+      <t-icon prefix="iconfont" name="vertical" size="26" data-name="vertical" bindtap="changeVerticalGrid"/>
+      <t-icon prefix="iconfont" name="horizontal" size="26" data-name="horizontal" bindtap="changeHorizontalGrid"/>
+    </view>
+    <view class="save-btn" bindtap="savePhoto">保存</view>
+  </view>
 </view>
