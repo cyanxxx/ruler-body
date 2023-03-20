@@ -21,19 +21,23 @@ export class PhotoManagement{
     this.photoCanvasHeight = this.horizintalSpace * 2
     this.offset = offset
     this.position = {x: offset, y: offset + this.horizintalSpace}
-    ctx?.save()
-    ctx!.fillStyle = '#F5F5F5'
-    ctx!.fillRect(offset, offset, width, height)
-    ctx?.restore()
+    this.drawBackGround()
+
     this[grid](bodyCanvas, images)
     this.grid = grid
+  }
+  drawBackGround() {
+    let { width, height, ctx } = this.bodyCanvas
+    ctx!.fillStyle = '#F5F5F5'
+    ctx!.fillRect(this.offset, this.offset, width, height)
   }
   changeGrid(grid: PhotoGrid) {
     if(this.grid === grid)return
     this.grid = grid
     this.photos.forEach(p => p.destroy())
     this.photos = []
-    this.bodyCanvas.ctx?.clearRect(this.offset, this.horizintalSpace, this.width, this.photoCanvasHeight)
+    this.bodyCanvas.ctx?.clearRect(this.offset, this.offset, this.width, this.photoCanvasHeight)
+    this.drawBackGround()
     this[grid](this.bodyCanvas, this.images)
   }
   [PhotoGrid.HORIZONTAL](bodyCanvas: BodyCanvas, images: WechatMiniprogram.MediaFile[]){

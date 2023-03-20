@@ -16,8 +16,8 @@ export class Photo extends RectNode{
   constructor(bodyCanvas: BodyCanvas, imagePath : string, paramArr: Tuple<number, 8>) {
     super({x: paramArr[4], y: paramArr[5]}, paramArr[6], paramArr[7])
 
-    let [sx, sy, sw, sh, dx, dy, dw, dh] = paramArr
-    const { canvas, ctx } = bodyCanvas
+    let [sx, sy, sw, sh] = paramArr
+    const { canvas } = bodyCanvas
 
     this.bodyCanvas = bodyCanvas
     this.image = canvas!.createImage()
@@ -32,8 +32,7 @@ export class Photo extends RectNode{
       this.photoWidth = sw
       this.photoHeight = sh
 
-      //@ts-ignore
-      ctx!.drawImage(this.image, sx, sy, sw, sh, dx, dy, dw, dh)
+      this.draw()
 
     }
     eventEmitter.on(Event.TouchMoveEvent, this.bindTouchMoveEvent)
@@ -114,8 +113,7 @@ export class Photo extends RectNode{
     this.photoHeight = this.ratio * this.photoHeight
     console.log(ratio)
     
-    //@ts-ignore
-    ctx!.drawImage(this.image, this.gridPosition.x, this.gridPosition.y, this.photoWidth, this.photoHeight, this.position.x, this.position.y, this.width, this.height)
+    this.draw()
   }
   move(point: Point2D) {
     if(!this.isTouch) return
@@ -125,6 +123,10 @@ export class Photo extends RectNode{
     this.gridPosition.y += y
     console.log(this.gridPosition.x, this.gridPosition.y, this.photoWidth, this.photoHeight, this.position.x, this.position.y, this.width, this.height)
     ctx?.clearRect(this.position.x, this.position.y, this.width, this.height)
+    this.draw()
+  }
+  draw() {
+    const { ctx } = this.bodyCanvas
     //@ts-ignore
     ctx!.drawImage(this.image, this.gridPosition.x, this.gridPosition.y, this.photoWidth, this.photoHeight, this.position.x, this.position.y, this.width, this.height)
   }

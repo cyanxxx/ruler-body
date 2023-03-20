@@ -1,10 +1,9 @@
 // index.ts
 
-import Grid from "../../miniprogram_npm/tdesign-miniprogram/grid/grid"
 import { BodyCanvas } from "./canvas"
 import { Event, eventEmitter } from "./event"
 import { PhotoManagement } from "./photo-management"
-import { Ruler } from "./ruler"
+import { Ruler, RulerManagement } from "./ruler"
 import { PhotoGrid } from "./type"
 
 // 获取应用实例
@@ -28,8 +27,8 @@ Page({
       // sourceType: ['album', 'camera'],
       sourceType: ['album']
     })
-    const ruler = new Ruler(bodyCanvas)
-    this.static.photoManagement = new PhotoManagement(bodyCanvas, imageRes.tempFiles, PhotoGrid.VERTICAL, ruler.size + ruler.lineSize)
+    const ruler = new RulerManagement(bodyCanvas)
+    this.static.photoManagement = new PhotoManagement(bodyCanvas, imageRes.tempFiles, PhotoGrid.VERTICAL, Ruler.size + Ruler.lineSize)
     
   },
   changeGrid(grid: PhotoGrid) {
@@ -41,13 +40,13 @@ Page({
   changeHorizontalGrid() {
     this.changeGrid(PhotoGrid.HORIZONTAL)
   },
-  canvasTouchStart(e: WechatMiniprogram.Event) {
+  canvasTouchStart(e: WechatMiniprogram.TouchEvent) {
     eventEmitter.emit(Event.TouchStartEvent, e)
   },
-  canvasTouchMove(e: WechatMiniprogram.Event) {
+  canvasTouchMove(e: WechatMiniprogram.TouchEvent) {
     eventEmitter.emit(Event.TouchMoveEvent, e)
   },
-  canvasTouchEnd(e: WechatMiniprogram.Event) {
+  canvasTouchEnd(e: WechatMiniprogram.TouchEvent) {
     eventEmitter.emit(Event.TouchEndEvent, e)
   },
   savePhoto() {
