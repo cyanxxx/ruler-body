@@ -1,0 +1,6 @@
+<!--pages/components/icon-text.wxml-->
+<view class="icon-text-container" bindtap="onTap">
+  <t-icon v-if="name" prefix="{{prefix}}" name="{{iconName}}" size="{{iconSize}}" data-name="{{iconName}}"/>
+  <slot v-else></slot>
+  <text class="icon-text">{{text}}</text>
+</view>

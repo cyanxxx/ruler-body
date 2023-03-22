@@ -1,4 +1,5 @@
 import { BodyCanvas } from "./canvas";
+import { Event, eventEmitter } from "./event";
 import { Photo } from "./photo";
 import { PhotoGrid, Point2D, Tuple } from "./type";
 
@@ -20,38 +21,37 @@ export class PhotoManagement{
     this.horizintalSpace = (height - offset) * 0.25
     this.photoCanvasHeight = this.horizintalSpace * 2
     this.offset = offset
-    this.position = {x: offset, y: offset + this.horizintalSpace}
+    this.position = {x: 0, y: offset + this.horizintalSpace}
     this.drawBackGround()
 
     this[grid](bodyCanvas, images)
     this.grid = grid
+
+    eventEmitter.emit(Event.ADDIMAGE, images)
   }
   drawBackGround() {
-    let { width, height, ctx } = this.bodyCanvas
+    let { height, ctx } = this.bodyCanvas
     ctx!.fillStyle = '#F5F5F5'
-    ctx!.fillRect(this.offset, this.offset, width, height)
+    ctx!.fillRect(0, this.offset, this.width, height)
   }
   changeGrid(grid: PhotoGrid) {
     if(this.grid === grid)return
     this.grid = grid
     this.photos.forEach(p => p.destroy())
     this.photos = []
-    this.bodyCanvas.ctx?.clearRect(this.offset, this.offset, this.width, this.photoCanvasHeight)
+    this.bodyCanvas.ctx?.clearRect(0, this.offset, this.width, this.photoCanvasHeight)
     this.drawBackGround()
     this[grid](this.bodyCanvas, this.images)
   }
   [PhotoGrid.HORIZONTAL](bodyCanvas: BodyCanvas, images: WechatMiniprogram.MediaFile[]){
     const imageWidth = this.width
     const imageHeight = this.photoCanvasHeight / images.length
-    this.loadPhotos(bodyCanvas, images, (i: number) => [imageWidth / 2, imageHeight / 2, imageWidth, imageHeight, this.offset,  this.offset + this.horizintalSpace + (imageHeight * i), imageWidth, imageHeight])
+    this.loadPhotos(bodyCanvas, images, (i: number) => [imageWidth / 2, imageHeight / 2, imageWidth, imageHeight, 0,  this.offset + this.horizintalSpace + (imageHeight * i), imageWidth, imageHeight])
   }
   [PhotoGrid.VERTICAL](bodyCanvas: BodyCanvas, images: WechatMiniprogram.MediaFile[]) {
-    let { width, height } = bodyCanvas
-    const imageWidth = width! / images.length
-    console.log('width', width, 'height', height)
+    const imageWidth = this.width! / images.length
     const imageHeight = this.photoCanvasHeight
-    this.loadPhotos(bodyCanvas, images, (i: number) => [imageWidth / 2, imageHeight / 2, imageWidth, imageHeight, this.offset + imageWidth * i, this.offset + this.horizintalSpace, imageWidth, imageHeight])
-   
+    this.loadPhotos(bodyCanvas, images, (i: number) => [imageWidth / 2, imageHeight / 2, imageWidth, imageHeight, imageWidth * i, this.offset + this.horizintalSpace, imageWidth, imageHeight])
   }
   loadPhotos(bodyCanvas: BodyCanvas, images: WechatMiniprogram.MediaFile[], action: (num: number) => Tuple<number, 8>) {
     images.forEach((imgFile, i) => {

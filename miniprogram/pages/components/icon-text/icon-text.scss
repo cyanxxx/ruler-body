@@ -1,0 +1,11 @@
+/* pages/components/icon-text.wxss */
+.icon-text-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .icon-text {
+    margin-top: 3px;
+    font-size: 12px;
+  }
+}

@@ -19,17 +19,17 @@ export class Ruler extends RectNode{
 }
 export class HorizonalRuler extends Ruler{
   processingLine = null as Line|null;
-  processingLineStartPosition = {x:0, y: 0};
   constructor(bodyCanvas: BodyCanvas) {
-    super(bodyCanvas, {x: 0,y: 0}, {width: bodyCanvas.width})
-    this.draw(bodyCanvas.ctx!)
+    super(bodyCanvas, {x: 0,y: 0}, {width: bodyCanvas.width - Ruler.size - Ruler.lineSize})
+    bodyCanvas.addItem(this)
+
+    this.draw()
     eventEmitter.on(Event.TouchMoveEvent, this.bindTouchMoveEvent)
     eventEmitter.on(Event.TouchStartEvent, this.bindTouchStartEvent)
     eventEmitter.on(Event.TouchEndEvent, this.releaseLine)
   }
   releaseLine = () => {
     this.processingLine = null
-    this.processingLineStartPosition = {x:0,y:0}
     this.release()
   }
   bindTouchMoveEvent = (e: WechatMiniprogram.TouchEvent) => {
@@ -38,7 +38,7 @@ export class HorizonalRuler extends Ruler{
     const curCanvasPoint = {x: x * this.bodyCanvas.pixelRatio, y: y * this.bodyCanvas.pixelRatio}
     this.isHit(curCanvasPoint)
     if(!this.isTouch && this.processingLine) {
-      this.processingLine.move({x: 0, y: y * this.bodyCanvas.pixelRatio - this.processingLineStartPosition.y})
+      this.processingLine.moveTo({x: 0, y: y * this.bodyCanvas.pixelRatio}, {width: this.bodyCanvas.width})
     }
   }
   bindTouchStartEvent = (e: WechatMiniprogram.TouchEvent) => {
@@ -48,32 +48,32 @@ export class HorizonalRuler extends Ruler{
     this.isHit({x:canvasX, y:canvasY})
     if(this.isTouch) {
       if(!this.processingLine) {
-        this.processingLine = new Line(this.bodyCanvas.ctx!, {x: 0, y: Ruler.size + Ruler.lineWidth}, {x: this.width, y: Ruler.size + Ruler.lineWidth}, 'cyan')
-        this.processingLineStartPosition = {x,y}
+        this.processingLine = new Line(this.bodyCanvas, {x: 0, y: Ruler.size + Ruler.lineWidth}, {x: this.width, y: Ruler.size + Ruler.lineWidth}, 'cyan')
       }
     }
   }
-  draw(ctx: WechatMiniprogram.CanvasContext) {
-    ctx.strokeRect(Ruler.size,0, this.width, Ruler.size)
+  draw() {
+    const { ctx: ctx } = this.bodyCanvas
+    ctx!.strokeRect(this.position.x, 0, this.width, Ruler.size)
       for(let i = 0; i < this.width; i += Ruler.space) {
         const lineWidth = i % Ruler.bigSpace === 0 ? Ruler.lineWidth * 1.6 : Ruler.lineWidth
-        ctx.beginPath()
-        ctx.moveTo(Ruler.size + i, Ruler.size )
-        ctx.lineTo(Ruler.size + i, Ruler.size - lineWidth)
-        ctx.closePath()
-        ctx.stroke()
-        const text = ctx.measureText(String(i));
-        i % Ruler.bigSpace === 0 && ctx.fillText(String(i),  Ruler.size + i - (text.width / 2), Ruler.size - lineWidth - 2)
+        ctx!.beginPath()
+        ctx!.moveTo(i, Ruler.size )
+        ctx!.lineTo(i, Ruler.size - lineWidth)
+        ctx!.closePath()
+        ctx!.stroke()
+        const text = ctx!.measureText(String(i));
+        i % Ruler.bigSpace === 0 && ctx!.fillText(String(i),  i - (text.width / 2), Ruler.size - lineWidth - 2)
       }
   }
 }
 
 export class VerticalRuler extends Ruler{
   processingLine = null as Line|null;
-  processingLineStartPosition = {x:0, y: 0};
   constructor(bodyCanvas: BodyCanvas) {
-    super(bodyCanvas, {x: 0,y: 0}, {height: bodyCanvas.height})
-    this.draw(bodyCanvas.ctx!)
+    super(bodyCanvas, {x: bodyCanvas.width - Ruler.size - Ruler.lineSize,y: 0}, {height: bodyCanvas.height})
+    this.draw()
+    bodyCanvas.addItem(this)
 
     eventEmitter.on(Event.TouchMoveEvent, this.bindTouchMoveEvent)
     eventEmitter.on(Event.TouchStartEvent, this.bindTouchStartEvent)
@@ -81,7 +81,6 @@ export class VerticalRuler extends Ruler{
   }
   releaseLine = () => {
     this.processingLine = null
-    this.processingLineStartPosition = {x:0,y:0}
     this.release()
   }
   bindTouchMoveEvent = (e: WechatMiniprogram.TouchEvent) => {
@@ -90,7 +89,7 @@ export class VerticalRuler extends Ruler{
     const curCanvasPoint = {x: x * this.bodyCanvas.pixelRatio, y: y * this.bodyCanvas.pixelRatio}
     this.isHit(curCanvasPoint)
     if(!this.isTouch && this.processingLine) {
-      this.processingLine.move({x: x* this.bodyCanvas.pixelRatio - this.processingLineStartPosition.x, y: 0})
+      this.processingLine.moveTo({x: x* this.bodyCanvas.pixelRatio, y: 0}, {height: this.bodyCanvas.height})
     }
   }
   bindTouchStartEvent = (e: WechatMiniprogram.TouchEvent) => {
@@ -100,33 +99,33 @@ export class VerticalRuler extends Ruler{
     this.isHit({x:canvasX, y:canvasY})
     if(this.isTouch) {
       if(!this.processingLine) {
-        this.processingLine = new Line(this.bodyCanvas.ctx!, {x: Ruler.size + Ruler.lineWidth, y: 0}, {x: Ruler.size + Ruler.lineWidth + this.width, y: this.height}, 'cyan')
-        this.processingLineStartPosition = {x,y}
+        this.processingLine = new Line(this.bodyCanvas, {x: this.position.x + Ruler.size + Ruler.lineWidth, y: 0}, {x: this.position.x + Ruler.size + Ruler.lineWidth + this.width, y: this.height}, 'cyan')
       }
     }
   }
-  draw(ctx: WechatMiniprogram.CanvasContext) {
-    ctx.lineWidth = Ruler.lineSize
-    ctx.strokeStyle  = '#BABABA'
-    ctx.fillStyle = '#BABABA'
-    ctx.strokeRect(0,0, Ruler.size, this.height)
+  draw() {
+    const { ctx: ctx } = this.bodyCanvas
+    ctx!.lineWidth = Ruler.lineSize
+    ctx!.strokeStyle  = '#BABABA'
+    ctx!.fillStyle = '#BABABA'
+    ctx!.strokeRect(this.position.x, 0, Ruler.size, this.height)
     for(let i = 0; i < this.height; i += Ruler.space) {
       const lineWidth = i % Ruler.bigSpace === 0 ? Ruler.lineWidth * 1.6 : Ruler.lineWidth
-      ctx.beginPath()
-      ctx.moveTo(Ruler.size, i)
-      ctx.lineTo(Ruler.size - lineWidth, i)
-      ctx.closePath()
-      ctx.stroke()
-      const text = ctx.measureText(String(i));
-      ctx.font = '16px serif'
-      i % Ruler.bigSpace === 0 && ctx.fillText(String(i), Ruler.size - lineWidth - text.width, i + 6)
+      ctx!.beginPath()
+      ctx!.moveTo(this.position.x + Ruler.size, i)
+      ctx!.lineTo(this.position.x + Ruler.size - lineWidth, i)
+      ctx!.closePath()
+      ctx!.stroke()
+      const text = ctx!.measureText(String(i));
+      ctx!.font = '16px serif'
+      i % Ruler.bigSpace === 0 && ctx!.fillText(String(i), this.position.x + Ruler.size - lineWidth - text.width, i + 6)
     }
   }
 }
 
 export class RulerManagement{
-  verticalRuler: Ruler
-  horizonalRuler: Ruler;
+  verticalRuler: VerticalRuler
+  horizonalRuler: HorizonalRuler;
   constructor(canvas: BodyCanvas) {
     this.verticalRuler = new VerticalRuler(canvas)
     this.horizonalRuler = new HorizonalRuler(canvas)

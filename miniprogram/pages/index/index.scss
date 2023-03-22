@@ -8,7 +8,7 @@
   }
   .canvas{
     width: 100%;
-    height: calc(100% - 40px);
+    height: calc(100% - 60px);
   }
   #hidden-photoCanvas{
     position: absolute;
@@ -20,37 +20,36 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 40px;
+    height: 60px;
     display: flex;
     justify-content: space-around;
-    padding-left: 1rem;
-    padding-right: 1rem;
     align-items: center;
     background-color: #333333;
     color: #fff;
   }
 }
-.color-picker-container{
-  flex-grow: 1;
+.bottom-tool-container{
+  display: flex;
+  flex-grow: 2;
+  justify-content: space-around;
 }
+
 .color-picker{
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: cyan;
   border: 3px solid #fff;
 }
 .grid-picker{
-  display: flex;
-  flex-grow: 2;
-  justify-content: space-around;
   .iconfont{
     flex-grow: 1;
   }
 }
-.save-btn{
+.canvas-btn{
+  display: flex;
   flex-grow: 2;
-  text-align: center;
+  justify-content: space-around;
 }
 
 .hidden{

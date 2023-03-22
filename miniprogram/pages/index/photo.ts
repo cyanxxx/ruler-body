@@ -34,6 +34,8 @@ export class Photo extends RectNode{
 
       this.draw()
 
+      this.bodyCanvas.addItem(this)
+
     }
     eventEmitter.on(Event.TouchMoveEvent, this.bindTouchMoveEvent)
     eventEmitter.on(Event.TouchStartEvent, this.bindTouchStartEvent)
@@ -87,6 +89,7 @@ export class Photo extends RectNode{
     }    
   }
   destroy() {
+    this.bodyCanvas.removeItem(this)
     eventEmitter.off(Event.TouchMoveEvent, this.bindTouchMoveEvent)
     eventEmitter.off(Event.TouchStartEvent, this.bindTouchStartEvent)
     eventEmitter.off(Event.TouchEndEvent, this.release)
@@ -113,7 +116,7 @@ export class Photo extends RectNode{
     this.photoHeight = this.ratio * this.photoHeight
     console.log(ratio)
     
-    this.draw()
+    this.bodyCanvas.redraw()
   }
   move(point: Point2D) {
     if(!this.isTouch) return
@@ -123,7 +126,8 @@ export class Photo extends RectNode{
     this.gridPosition.y += y
     console.log(this.gridPosition.x, this.gridPosition.y, this.photoWidth, this.photoHeight, this.position.x, this.position.y, this.width, this.height)
     ctx?.clearRect(this.position.x, this.position.y, this.width, this.height)
-    this.draw()
+
+    this.bodyCanvas.redraw()
   }
   draw() {
     const { ctx } = this.bodyCanvas

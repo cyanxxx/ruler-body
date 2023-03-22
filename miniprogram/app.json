@@ -9,7 +9,8 @@
     "navigationBarTitleText": "Weixin",
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": false,
-    "disableScroll": true
+    "disableScroll": true,
+    "disableSwipeBack": true
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

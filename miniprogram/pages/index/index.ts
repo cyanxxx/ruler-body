@@ -14,7 +14,25 @@ Page({
     photoManagement: null as PhotoManagement | null
   },
   data: {
-    ctx: null as WechatMiniprogram.CanvasContext | null
+    ctx: null as WechatMiniprogram.CanvasContext | null,
+    imgs: []
+  },
+  hasPhoto() {
+    return !!this.data.imgs.length
+  },
+  onLoad() {
+    eventEmitter.on(Event.ADDIMAGE, this.addImgs)
+    eventEmitter.on(Event.RESETCANVAS, this.removeImgs)
+  },
+  addImgs(imgs: []) {
+    this.setData({
+      imgs
+    })
+  },
+  removeImgs() {
+    this.setData({
+      imgs: []
+    })
   },
   async addPhotos() {
     const bodyCanvas = await this.setBodyCanvas()
@@ -29,7 +47,6 @@ Page({
     })
     const ruler = new RulerManagement(bodyCanvas)
     this.static.photoManagement = new PhotoManagement(bodyCanvas, imageRes.tempFiles, PhotoGrid.VERTICAL, Ruler.size + Ruler.lineSize)
-    
   },
   changeGrid(grid: PhotoGrid) {
     this.static.photoManagement?.changeGrid(grid)
@@ -49,6 +66,9 @@ Page({
   canvasTouchEnd(e: WechatMiniprogram.TouchEvent) {
     eventEmitter.emit(Event.TouchEndEvent, e)
   },
+  canvasTap(e: WechatMiniprogram.TouchEvent) {
+    eventEmitter.emit(Event.TapEvent, e)
+  },
   savePhoto() {
     console.log('savePhoto')
     this.static.photoManagement?.bodyCanvas.savePhoto(this.static.photoManagement)
@@ -58,5 +78,9 @@ Page({
     const bodyCanvas = new BodyCanvas('#photoCanvas')
     await bodyCanvas.getContextAndCanvas()
     return bodyCanvas    
+  },
+
+  clearCanvas()  {
+    this.static.photoManagement?.bodyCanvas.clear()
   }
 })

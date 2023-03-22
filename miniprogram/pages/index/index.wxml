@@ -1,17 +1,24 @@
 <view class="wrapper">
-  <view class="button-view {{!!ctx? 'hidden' : ''}}">
+  <view class="button-view {{!!imgs.length? 'hidden' : ''}}">
     <t-button theme="primary" icon="add" bindtap="addPhotos">添加图片</t-button>
   </view>
-  <canvas id="photoCanvas" type="2d" class="canvas {{!ctx? 'hidden' : ''}}" bindtouchstart="canvasTouchStart" bindtouchmove="canvasTouchMove"  bindtouchend="canvasTouchEnd"></canvas>
+  <canvas id="photoCanvas" type="2d" class="canvas {{!imgs.length? 'hidden' : ''}}" bindtouchstart="canvasTouchStart" bindtouchmove="canvasTouchMove"  bindtouchend="canvasTouchEnd" bindtap="canvasTap"></canvas>
   <canvas id="hidden-photoCanvas" class="canvas" type="2d"></canvas>
-  <view class="bottom-tools {{!ctx? 'hidden' : ''}}">
-    <view class="color-picker-container">
-      <view class="color-picker"></view>
+  <view class="bottom-tools {{!imgs.length? 'hidden' : ''}}">
+    <view class="color-picker-container bottom-tool-container">
+      <icon-text text="拾色器">
+        <view class="color-picker"></view>
+      </icon-text>
+      <icon-text icon-name="layers" click-handler="changeVerticalGrid" text="显示">
+      </icon-text>
     </view>
-    <view class="grid-picker">
-      <t-icon prefix="iconfont" name="vertical" size="26" data-name="vertical" bindtap="changeVerticalGrid"/>
-      <t-icon prefix="iconfont" name="horizontal" size="26" data-name="horizontal" bindtap="changeHorizontalGrid"/>
+    <view class="grid-picker bottom-tool-container">
+      <icon-text prefix="iconfont" icon-name="vertical" bind:icontap="changeVerticalGrid" text="垂直布局"></icon-text>
+      <icon-text prefix="iconfont" icon-name="horizontal" bind:icontap="changeHorizontalGrid" text="水平布局"></icon-text>
     </view>
-    <view class="save-btn" bindtap="savePhoto">保存</view>
+    <view class="canvas-btn bottom-tool-container">
+      <icon-text icon-name="clear" bind:icontap="clearCanvas" text="清空画布"></icon-text>
+      <icon-text icon-name="save" bind:icontap="savePhoto" text="保存"></icon-text>
+    </view>
   </view>
 </view>

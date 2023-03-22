@@ -1,4 +1,10 @@
+import { Event, eventEmitter } from "./event"
 import { PhotoManagement } from "./photo-management"
+
+interface Graphic {
+  draw: () => void;
+  destroy?: () => void;
+}
 
 export class BodyCanvas{
   canvas: WechatMiniprogram.Canvas | null = null
@@ -6,6 +12,7 @@ export class BodyCanvas{
   ctx: WechatMiniprogram.CanvasContext | null = null
   hiddenCtx: WechatMiniprogram.CanvasContext| null = null
 
+  graphics: Graphic[] = []
   pixelRatio: number = 1
   id: string
   
@@ -31,6 +38,26 @@ export class BodyCanvas{
   
   constructor(selector: string) {
     this.id = selector
+  }
+  
+  addItem(graphic: Graphic) {
+    this.graphics.push(graphic)
+  }
+  removeItem(graphic: Graphic) {
+    this.graphics = this.graphics.filter(g => g !== graphic)
+    this.redraw()
+  }
+
+  redraw() {
+    this.ctx?.clearRect(0,0,this.width, this.height)
+    this.graphics.forEach(g => g.draw())
+  }
+
+  clear() {
+    this.ctx?.clearRect(0,0,this.width, this.height)
+    this.graphics.forEach(g => g.destroy && g.destroy())
+    this.graphics = []
+    eventEmitter.emit(Event.RESETCANVAS)
   }
 
   async getContextAndCanvas() {

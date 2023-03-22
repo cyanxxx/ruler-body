@@ -5,5 +5,8 @@ export const eventEmitter = new EventEmitter()
 export enum Event{
   TouchStartEvent = 'TouchStartEvent',
   TouchEndEvent= 'TouchEndEvent',
-  TouchMoveEvent= 'TouchMoveEvent'
+  TouchMoveEvent= 'TouchMoveEvent',
+  TapEvent = "TapEvent",
+  ADDIMAGE = "AddImage",
+  RESETCANVAS = "ResetCanvas"
 }
