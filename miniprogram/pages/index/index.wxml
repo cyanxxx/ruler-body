@@ -35,7 +35,18 @@
     </view>
     <view class="canvas-btn bottom-tool-container">
       <icon-text icon-name="clear" bind:icontap="clearCanvas" text="清空画布"></icon-text>
-      <icon-text icon-name="save" bind:icontap="savePhoto" text="保存"></icon-text>
+      <icon-text icon-name="save" bind:icontap="toggleSavePhotoDiaglog" text="保存"></icon-text>
     </view>
   </view>
+  <t-dialog
+    visible="{{saveCanvas}}"
+    content="保存至本地"
+    confirm-btn="确定"
+    cancel-btn="取消"
+    bind:confirm="savePhoto"
+    bind:cancel="toggleSavePhotoDiaglog"
+  >
+     <t-switch slot="content" bindchange="toggleLineSwitch" value="{{lineSwitch}}"></t-switch>
+      分割线
+</t-dialog>
 </view>

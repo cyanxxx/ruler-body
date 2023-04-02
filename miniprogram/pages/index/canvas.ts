@@ -136,36 +136,38 @@ export class BodyCanvas{
   }
 
   savePhoto(photoManagement: PhotoManagement){
-    const { x, y } = photoManagement.position
-    //@ts-ignore
-    const imageData = this.ctx!.getImageData(x, y, photoManagement.width, photoManagement.photoCanvasHeight)
-  
-    //@ts-ignore
-    this.hiddenCtx!.putImageData(imageData, 0, 0)
-    wx.canvasToTempFilePath({
-      canvas: this.hiddenCanvas!,
-      quality: 1,
-      fileType: 'png',
-      width: photoManagement.width / this.pixelRatio,
-      height: photoManagement.photoCanvasHeight / this.pixelRatio,
-      success: res => {
-        console.log(res.tempFilePath)
-        this.ctx?.restore()
+    this.canvas?.requestAnimationFrame(() => {
+      const { x, y } = photoManagement.position
+      //@ts-ignore
+      const imageData = this.ctx!.getImageData(x, y, photoManagement.width, photoManagement.photoCanvasHeight)
+
+      //@ts-ignore
+      this.hiddenCtx!.putImageData(imageData, 0, 0)
+      wx.canvasToTempFilePath({
+        canvas: this.hiddenCanvas!,
+        quality: 1,
+        fileType: 'png',
+        width: photoManagement.width / this.pixelRatio,
+        height: photoManagement.photoCanvasHeight / this.pixelRatio,
+        success: res => {
+          console.log(res.tempFilePath)
+          this.ctx?.restore()
           // 生成的图片临时文件路径
-          wx.saveImageToPhotosAlbum({ 
-            filePath: res.tempFilePath, 
+          wx.saveImageToPhotosAlbum({
+            filePath: res.tempFilePath,
             success(res) {
               wx.showToast({
-                title:'保存成功',
+                title: '保存成功',
                 icon: 'none',
                 duration: 2000
               });
-          }
-        })
-      },
-      fail: (res) => {
-        console.log(res)
-      }
-  })
+            }
+          })
+        },
+        fail: (res) => {
+          console.log(res)
+        }
+      })
+    })
   }
 }

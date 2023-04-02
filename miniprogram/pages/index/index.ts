@@ -23,7 +23,8 @@ Page({
     layoutColorMenuOpen: false,
     color: INITIAL_LINE_COLOR,
     pointerX: 0,
-    alreadySetPointX: false
+    alreadySetPointX: false,
+    saveCanvas: false
   },
   onLoad() {
     eventEmitter.on(Event.AddImage, this.addImgs)
@@ -137,6 +138,12 @@ Page({
   savePhoto() {
     console.log('savePhoto')
     this.static.photoManagement?.bodyCanvas.savePhoto(this.static.photoManagement)
+    this.toggleSavePhotoDiaglog()
+  },
+  toggleSavePhotoDiaglog() {
+    this.setData({
+      saveCanvas: !this.data.saveCanvas
+    })
   },
 
   async setBodyCanvas() {

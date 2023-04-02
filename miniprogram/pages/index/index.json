@@ -3,6 +3,7 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-icon": "tdesign-miniprogram/icon/icon",
     "icon-text": "../components/icon-text/icon-text",
-    "t-switch": "tdesign-miniprogram/switch/switch"
+    "t-switch": "tdesign-miniprogram/switch/switch",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog"
   }
 }
