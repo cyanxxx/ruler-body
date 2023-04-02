@@ -8,9 +8,11 @@
   "dependencies": {
     "classnames": "^2.3.2",
     "eventemitter3": "^5.0.0",
-    "tdesign-miniprogram": "^1.0.2"
+    "tdesign-miniprogram": "^1.0.2",
+    "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
+    "@types/tinycolor2": "^1.4.3",
     "miniprogram-api-typings": "^2.8.3-1"
   },
   "main": ".eslintrc.js",

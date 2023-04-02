@@ -5,6 +5,7 @@ export class RectNode{
   width: number
   height: number
   isTouch: boolean = false
+  
   constructor(position: Point2D, w: number, h: number) {
     this.position = position
     this.width = w

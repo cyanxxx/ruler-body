@@ -7,6 +7,9 @@ export enum Event{
   TouchEndEvent= 'TouchEndEvent',
   TouchMoveEvent= 'TouchMoveEvent',
   TapEvent = "TapEvent",
-  ADDIMAGE = "AddImage",
-  RESETCANVAS = "ResetCanvas"
+  AddImage = "AddImage",
+  ResetCanvas = "ResetCanvas",
+  TogglerRulerSwicth = "TogglerRulerSwicth",
+  TogglerLineSwicth = "TogglerLineSwicth",
+  LineColorChange = "LineColorChange",
 }

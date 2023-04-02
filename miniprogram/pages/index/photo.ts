@@ -16,7 +16,6 @@ export class Photo extends RectNode{
   constructor(bodyCanvas: BodyCanvas, imagePath : string, paramArr: Tuple<number, 8>) {
     super({x: paramArr[4], y: paramArr[5]}, paramArr[6], paramArr[7])
 
-    let [sx, sy, sw, sh] = paramArr
     const { canvas } = bodyCanvas
 
     this.bodyCanvas = bodyCanvas
@@ -26,12 +25,12 @@ export class Photo extends RectNode{
       console.log('img.width', this.image.width)
       console.log('img.height', this.image.height)
       // 求出图片的中间位置
-      sx = Math.abs(sx - this.image.width / 2)
-      sy = Math.abs(sy - this.image.height / 2)
-      this.gridPosition = { x: sx, y: sy }
-      this.photoWidth = sw
-      this.photoHeight = sh
-
+      // sx = Math.abs(sx - this.image.width / 2)
+      // sy = Math.abs(sy - this.image.height / 2)
+      // this.gridPosition = { x: sx, y: sy }
+      // this.photoWidth = sw
+      // this.photoHeight = sh
+      this.setPhotoPositionAndSize(paramArr)
       this.draw()
 
       this.bodyCanvas.addItem(this)
@@ -45,8 +44,12 @@ export class Photo extends RectNode{
     const {x, y} = e.touches[0] as unknown as Point2D
     const dx = this.moveStartPosition.x - x 
     const dy = this.moveStartPosition.y - y
-    const ratioDx = this.photoWidth * dx / (this.bodyCanvas.cssWidth) * 0.25
-    const ratioDy = this.photoHeight * dy / (this.bodyCanvas.cssHeight) * 0.25
+    this.moveStartPosition = {
+      x,
+      y
+    }
+    const ratioDx = this.photoWidth * dx / (this.bodyCanvas.cssWidth)
+    const ratioDy = this.photoHeight * dy / (this.bodyCanvas.cssHeight)
     this.move({x: ratioDx,y: ratioDy})
   }
   bindTouchMoveEvent = (e: WechatMiniprogram.TouchEvent) => {
@@ -128,6 +131,18 @@ export class Photo extends RectNode{
     ctx?.clearRect(this.position.x, this.position.y, this.width, this.height)
 
     this.bodyCanvas.redraw()
+  }
+  setPhotoPositionAndSize(paramArr: Tuple<number, 8>) {
+    let [sx, sy, sw, sh, dx, dy, dw, dh ] = paramArr
+    sx = Math.abs(sx - this.image.width / 2)
+    sy = Math.abs(sy - this.image.height / 2)
+    this.gridPosition = { x: sx, y: sy }
+    this.photoWidth = sw
+    this.photoHeight = sh
+    this.position.x = dx
+    this.position.y = dy
+    this.width = dw
+    this.height = dh
   }
   draw() {
     const { ctx } = this.bodyCanvas

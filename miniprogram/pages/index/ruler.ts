@@ -10,11 +10,23 @@ export class Ruler extends RectNode{
   static lineSize = 4
   static space = 10
   static bigSpace = 50
+  
   bodyCanvas: BodyCanvas
+  isHide: boolean = false
 
   constructor(bodyCanvas: BodyCanvas, position:Point2D, {width, height}: {width?: number, height?: number}) {
     super(position, width || Ruler.size + Ruler.lineSize, height || Ruler.size + Ruler.lineSize)
     this.bodyCanvas = bodyCanvas
+    eventEmitter.on(Event.TogglerRulerSwicth, this.toggleHide)
+    eventEmitter.on(Event.LineColorChange, Ruler.changeColor)
+  }
+
+  static changeColor = (color: string) => {
+    Line.color = color
+  }
+
+  toggleHide = (rulerSwitch: boolean) => {
+    this.isHide = !rulerSwitch
   }
 }
 export class HorizonalRuler extends Ruler{
@@ -28,6 +40,7 @@ export class HorizonalRuler extends Ruler{
     eventEmitter.on(Event.TouchStartEvent, this.bindTouchStartEvent)
     eventEmitter.on(Event.TouchEndEvent, this.releaseLine)
   }
+  
   releaseLine = () => {
     this.processingLine = null
     this.release()
@@ -48,12 +61,13 @@ export class HorizonalRuler extends Ruler{
     this.isHit({x:canvasX, y:canvasY})
     if(this.isTouch) {
       if(!this.processingLine) {
-        this.processingLine = new Line(this.bodyCanvas, {x: 0, y: Ruler.size + Ruler.lineWidth}, {x: this.width, y: Ruler.size + Ruler.lineWidth}, 'cyan')
+        this.processingLine = new Line(this.bodyCanvas, {x: 0, y: Ruler.size + Ruler.lineWidth}, {x: this.width, y: Ruler.size + Ruler.lineWidth})
       }
     }
   }
   draw() {
     const { ctx: ctx } = this.bodyCanvas
+    ctx!.lineWidth = Ruler.lineSize;
     ctx!.strokeRect(this.position.x, 0, this.width, Ruler.size)
       for(let i = 0; i < this.width; i += Ruler.space) {
         const lineWidth = i % Ruler.bigSpace === 0 ? Ruler.lineWidth * 1.6 : Ruler.lineWidth
@@ -99,7 +113,7 @@ export class VerticalRuler extends Ruler{
     this.isHit({x:canvasX, y:canvasY})
     if(this.isTouch) {
       if(!this.processingLine) {
-        this.processingLine = new Line(this.bodyCanvas, {x: this.position.x + Ruler.size + Ruler.lineWidth, y: 0}, {x: this.position.x + Ruler.size + Ruler.lineWidth + this.width, y: this.height}, 'cyan')
+        this.processingLine = new Line(this.bodyCanvas, {x: this.position.x + Ruler.size + Ruler.lineWidth, y: 0}, {x: this.position.x + Ruler.size + Ruler.lineWidth + this.width, y: this.height})
       }
     }
   }

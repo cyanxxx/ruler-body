@@ -1,16 +1,33 @@
-<view class="wrapper">
+<view class="wrapper" mut-bind:tap="cancelLayoutMenu">
   <view class="button-view {{!!imgs.length? 'hidden' : ''}}">
     <t-button theme="primary" icon="add" bindtap="addPhotos">添加图片</t-button>
   </view>
   <canvas id="photoCanvas" type="2d" class="canvas {{!imgs.length? 'hidden' : ''}}" bindtouchstart="canvasTouchStart" bindtouchmove="canvasTouchMove"  bindtouchend="canvasTouchEnd" bindtap="canvasTap"></canvas>
-  <canvas id="hidden-photoCanvas" class="canvas" type="2d"></canvas>
+  <canvas id="hidden-photoCanvas" class="canvas hidden-canvas" type="2d"></canvas>
+  <canvas id="pattern-canvas" class="canvas hidden-canvas" type="2d"></canvas>
   <view class="bottom-tools {{!imgs.length? 'hidden' : ''}}">
     <view class="color-picker-container bottom-tool-container">
-      <icon-text text="拾色器">
-        <view class="color-picker"></view>
+      <icon-text text="拾色器" data-name="colorMenu" mut-bind:tap="toggleLayoutMenu">
+        <view class="color-picker" style="background: {{color}}"></view>
       </icon-text>
-      <icon-text icon-name="layers" click-handler="changeVerticalGrid" text="显示">
+      <view class="color menu {{!layoutColorMenuOpen? 'hidden' : ''}}" catchtap="noop">
+        <view class="color-menu-item" id="color-menu-container">
+          <view class="slider"></view>
+          <view class="pointer" bindtouchmove="changeColor" style="left: {{pointerX}}px;"></view>
+        </view>
+      </view>
+      <icon-text icon-name="layers" text="显示" data-name="rulerMenu" mut-bind:tap="toggleLayoutMenu">
       </icon-text>
+      <view class="menu {{!layoutRulerMenuOpen? 'hidden' : ''}}" catchtap="noop">
+        <view class="menu-item">
+          <t-switch bindchange="toggleLineSwitch" value="{{lineSwitch}}"></t-switch>
+          分割线
+        </view>
+        <view class="menu-item">
+          <t-switch bindchange="togglerRulerSwitch" value="{{rulerSwitch}}"></t-switch>
+          标尺
+        </view>
+      </view>
     </view>
     <view class="grid-picker bottom-tool-container">
       <icon-text prefix="iconfont" icon-name="vertical" bind:icontap="changeVerticalGrid" text="垂直布局"></icon-text>
