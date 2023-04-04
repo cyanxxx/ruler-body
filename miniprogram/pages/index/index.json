@@ -4,6 +4,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "icon-text": "../components/icon-text/icon-text",
     "t-switch": "tdesign-miniprogram/switch/switch",
-    "t-dialog": "tdesign-miniprogram/dialog/dialog"
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox"
   }
 }

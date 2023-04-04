@@ -40,13 +40,14 @@
   </view>
   <t-dialog
     visible="{{saveCanvas}}"
-    content="保存至本地"
+    title="保存至本地"
     confirm-btn="确定"
     cancel-btn="取消"
     bind:confirm="savePhoto"
     bind:cancel="toggleSavePhotoDiaglog"
   >
-     <t-switch slot="content" bindchange="toggleLineSwitch" value="{{lineSwitch}}"></t-switch>
-      分割线
+    <div class="save-content" slot="content">
+      <t-checkbox label="保留分割线" icon="rectangle" checked="{{lineSwitch}}" bind:change="toggleLineSwitch" borderless />
+    </div>
 </t-dialog>
 </view>
